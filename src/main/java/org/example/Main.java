@@ -43,26 +43,27 @@ public class Main {
             value = IN.nextLine();
 
             if(value.equals("등록")){
-                // 등록 함수
+                // 명언 등록 함수 호출
                 addFamousSaying();
             }
             else if(value.equals("목록")){
-                // 명언 목록 출력 함수
+                // 명언 목록 출력 함수 호출
                 printFamousSayings();
             }
             else if(value.contains(("삭제?id="))){
-                // 명언 삭제 함수
+                // 명언 삭제 함수 호출
                 deleteFamousSaying(value);
             }
             else if(value.contains("수정?id=")){
-                // 명언 수정 함수
+                // 명언 수정 함수 호출
                 updateFamousSaying(value);
             }
             else if(value.equals("빌드")){
-                // data.json 파일 저장 함수
+                // data.json 파일 저장 함수 호출
                 buildFamousSaying();
             }
             else {
+                // 특정 명령어가 아닐 경우 호출
                 System.out.println("적절한 명령어가 아닙니다.");
             }
         }
@@ -144,6 +145,10 @@ public class Main {
                 List<String> filenames = Arrays.stream(files).map(f -> f.getName()).toList();
 
                 for(String filename : filenames){
+                    // data.json 파일일 경우 중복되기 때문에 반복문에서 제외
+                    if(filename.equals("data.json")){
+                        continue;
+                    }
                     // 명언 파일 읽기
                     // - 파일 경로 + /파일 이름
                     File newFile = new File(FILE_PATH + "/" + filename);
