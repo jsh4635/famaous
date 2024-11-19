@@ -66,6 +66,7 @@ public class Main {
                 System.out.println("적절한 명령어가 아닙니다.");
             }
         }
+        IN.close();
     }
 
     /**
