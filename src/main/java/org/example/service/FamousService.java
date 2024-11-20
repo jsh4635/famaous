@@ -58,7 +58,7 @@ public class FamousService {
      * @author shjung
      * @since 2024. 11. 20.
      */
-    public List<FamousSayingModel> readFamousSayings(String value){
+    public List<FamousSayingModel> readFamousSayings(String value, String keyword, String keywordType){
         List<FamousSayingModel> famousSayingModels = new ArrayList<>();
 
         // 명언 이름 목록 조회
@@ -112,12 +112,6 @@ public class FamousService {
 
         // 검색 기능 추가 필터링
         if(!value.equals("목록")){
-            // 물음표 기준으로 검색 조건 파싱
-            String[] keywords = value.split("\\?")[1].split("&");
-            // 검색어 파싱
-            String keyword = keywords[0].split("=")[1];
-            // 검색어 타입 파싱
-            String keywordType = keywords[1].split("=")[1];
             // 작가 검색일 경우
             if(keywordType.equals("author")){
                 famousSayingModels = famousSayingModels.stream().filter(f -> f.getAuthor().contains(keyword)).toList();

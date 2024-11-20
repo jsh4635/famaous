@@ -52,12 +52,52 @@ public class FamousController {
      * @since 2024. 11. 20.
      */
     public void printFamousSayings(String value){
-        famousSayingModels = famousService.readFamousSayings(value);
+        // 검색어
+        String keyword = "";
+        // 검색어 타입
+        String keywordType = "";
+        // 페이지 목록
+        int pageNum = 1;
+
+        if(!value.equals("목록")){
+            // 물음표 기준으로 검색 조건 파싱
+            String[] keywords = value.split("\\?")[1].split("&");
+            for (String s : keywords) {
+                if (s.contains("page")) {
+                    pageNum = Integer.parseInt(s.replaceAll("[^0-9]", ""));
+                } else if (s.contains("keywordType")) {
+                    keywordType = s.split("=")[1];
+                } else if (s.contains("keyword")) {
+                    keyword = s.split("=")[1];
+                }
+            }
+        }
+
+        famousSayingModels = famousService.readFamousSayings(value, keyword, keywordType);
+
+        int pages = (famousSayingModels.size() / 5) + (famousSayingModels.size() % 5 == 0 ? 0 : 1);
+
+        famousSayingModels = famousSayingModels.stream().skip((pageNum - 1) * 5).limit(5).toList();
+        System.out.println("----------------");
+        System.out.println("검색 타입: " + keywordType);
+        System.out.println("검색어: " + keyword);
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------");
         famousSayingModels.stream().forEach(f -> {
             System.out.println(f.getId() + " / " + f.getAuthor() + " / " + f.getContents());
         });
+        System.out.println("----------------");
+        System.out.print("페이지: ");
+        for(int i = 1; i < pages; i++){
+            if(pageNum == i)System.out.print("[");
+            System.out.print(" " + i + " ");
+            if(pageNum == i)System.out.print("]");
+            System.out.print(" / ");
+        }
+        if(pageNum == pages)System.out.print("[");
+        System.out.print(" " + pages + " ");
+        if(pageNum == pages)System.out.print("]");
+        System.out.println();
     }
 
     /**

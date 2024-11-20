@@ -19,11 +19,8 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        // 마지막 ID 찾기 위한 함수
-        //readLastId();
-        // 저장된 명언 목록들 읽기 위한 함수
-        //readFamousSayings();
-
+        // 마지막 ID에서 + 1를 더함
+        // - 마지막 보다 하나 높은 ID를 등록하기 위함
         int lastId = famousController.readLastId() + 1;
 
         System.out.println("== 명언 앱 ==");
