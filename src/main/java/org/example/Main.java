@@ -1,11 +1,8 @@
 package org.example;
 
 import org.example.controller.FamousController;
-import org.example.repository.entity.FamousSaying;
 
-import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
 
