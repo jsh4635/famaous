@@ -1,17 +1,16 @@
-package org.example;
+package org.example.controller.model;
 
-public class FamousSaying {
+public class FamousSayingModel {
+    private int id;
+    private String contents;
+    private String author;
 
-    private int id = 0;
-    private String content = "";
-    private String author = "";
-
-    public FamousSaying() {
+    public FamousSayingModel() {
     }
 
-    public FamousSaying(int id, String content, String author) {
+    public FamousSayingModel(int id, String contents, String author) {
         this.id = id;
-        this.content = content;
+        this.contents = contents;
         this.author = author;
     }
 
@@ -23,12 +22,12 @@ public class FamousSaying {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getContents() {
+        return contents;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
     public String getAuthor() {
@@ -43,7 +42,7 @@ public class FamousSaying {
     public String toString() {
         final StringBuffer sb = new StringBuffer("{");
         sb.append("\"id\":").append(id);
-        sb.append(", \"content\": \"").append(content).append('"');
+        sb.append(", \"content\": \"").append(contents).append('"');
         sb.append(", \"author\": \"").append(author).append('"');
         sb.append('}');
         return sb.toString();

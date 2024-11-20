@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.controller.FamousController;
+import org.example.repository.entity.FamousSaying;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,14 +13,16 @@ public class Main {
     private static final Scanner IN = new Scanner(System.in);
 
     // 명언 목록을 넣기 위한 리스트
-    private static List<FamousSaying> famousSayings = new ArrayList<>();
+    //private static List<FamousSaying> famousSayings = new ArrayList<>();
 
     // 파일 저장 위치
-    private static final String FILE_PATH = "/Users/shjung/Desktop/Java/db/wiseSaying";
+    //private static final String FILE_PATH = "/Users/shjung/Desktop/Java/db/wiseSaying";
 
     // 명언 등록 아이디
     // - 처음 만들 때를 위한 1 초기화 선언
-    private static  int number = 1;
+    //private static  int number = 1;
+
+    private static FamousController famousController = new FamousController();
 
     /**
      *
@@ -27,9 +32,11 @@ public class Main {
      */
     public static void main(String[] args) {
         // 마지막 ID 찾기 위한 함수
-        readLastId();
+        //readLastId();
         // 저장된 명언 목록들 읽기 위한 함수
-        readFamousSayings();
+        //readFamousSayings();
+
+        int lastId = famousController.readLastId() + 1;
 
         System.out.println("== 명언 앱 ==");
 
@@ -44,23 +51,23 @@ public class Main {
 
             if(value.equals("등록")){
                 // 명언 등록 함수 호출
-                addFamousSaying();
+                lastId = famousController.addFamousSaying(lastId);
             }
             else if(value.equals("목록")){
                 // 명언 목록 출력 함수 호출
-                printFamousSayings();
+                famousController.printFamousSayings();
             }
             else if(value.contains(("삭제?id="))){
                 // 명언 삭제 함수 호출
-                deleteFamousSaying(value);
+                famousController.deleteFamousSaying(value);
             }
             else if(value.contains("수정?id=")){
                 // 명언 수정 함수 호출
-                updateFamousSaying(value);
+                famousController.updateFamousSaying(value);
             }
             else if(value.equals("빌드")){
                 // data.json 파일 저장 함수 호출
-                buildFamousSaying();
+                famousController.buildFamousSaying();
             }
             else {
                 // 특정 명령어가 아닐 경우 호출
@@ -77,7 +84,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void readLastId(){
+    /*private static void readLastId(){
         // 마지막 ID 저장된 파일 불러오기
         File lastIdFile = new File(FILE_PATH + "/lastId.txt");
         // 만약에 없을 경우 함수 종료
@@ -109,7 +116,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      *
@@ -118,7 +125,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void readFamousSayings(){
+    /*private static void readFamousSayings(){
         // 파일이 저장된 위치
         File directory = new File(FILE_PATH);
 
@@ -144,11 +151,24 @@ public class Main {
                 // 파일 목록에서 이름만 저장
                 List<String> filenames = Arrays.stream(files).map(f -> f.getName()).toList();
 
-                for(String filename : filenames){
-                    // data.json 파일일 경우 중복되기 때문에 반복문에서 제외
-                    if(filename.equals("data.json")){
-                        continue;
+                filenames = filenames.stream().filter(f -> !f.equals("data.json")).toList();
+
+                String[] filenames1 = filenames.toArray(new String[filenames.size()]);
+
+                Arrays.sort(filenames1, new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        String s1 = o1.replaceAll("[^0-9]", "");
+                        String s2 = o2.replaceAll("[^0-9]", "");
+                        int a = Integer.valueOf(s1);
+                        int b = Integer.valueOf(s2);
+                        return a - b;
                     }
+                });
+
+                filenames = Arrays.stream(filenames1).toList();
+
+                for(String filename : filenames){
                     // 명언 파일 읽기
                     // - 파일 경로 + /파일 이름
                     File newFile = new File(FILE_PATH + "/" + filename);
@@ -177,7 +197,7 @@ public class Main {
 
                     // 명언 오브젝트에 데이터 저장
                     famousSaying.setId(id);
-                    famousSaying.setContent(contents);
+                    famousSaying.setContents(contents);
                     famousSaying.setAuthor(author);
 
                     // 명언 목록에 명언 오브젝트 추가
@@ -189,7 +209,7 @@ public class Main {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     /**
      *
@@ -198,7 +218,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void addFamousSaying(){
+    /*private static void addFamousSaying(){
         // 명언 데이터 입력
         System.out.print("명언: ");
         String contents = IN.nextLine();
@@ -239,7 +259,7 @@ public class Main {
         System.out.println(number + "번 명언이 등록되었습니다.");
         // ID 증가
         number++;
-    }
+    }*/
 
     /**
      *
@@ -248,15 +268,15 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void printFamousSayings(){
+    /*private static void printFamousSayings(){
         // 목록 출력
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------");
         // for문을 이용한 목록 출력
         for(FamousSaying f : famousSayings){
-            System.out.println(f.getId() + " / " + f.getAuthor() + " / " + f.getContent());
+            System.out.println(f.getId() + " / " + f.getAuthor() + " / " + f.getContents());
         }
-    }
+    }*/
 
     /**
      *
@@ -267,7 +287,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void deleteFamousSaying(String value){
+    /*private static void deleteFamousSaying(String value){
         // 명령어에서 ID 추출
         value = value.replaceAll("[^0-9]", "");
         int index = Integer.parseInt(value);
@@ -289,7 +309,7 @@ public class Main {
         } catch (Exception e) {
             System.out.println(index + "번 명언이 존재하지 않습니다.");
         }
-    }
+    }*/
 
     /**
      *
@@ -300,7 +320,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void updateFamousSaying(String value){
+    /*private static void updateFamousSaying(String value){
         // 명령어에서 명언 ID 추출
         value = value.replaceAll("[^0-9]", "");
         int index = Integer.parseInt(value);
@@ -313,7 +333,7 @@ public class Main {
             // 새로운 명언에 기존 ID를 가진 명언 저장 데이터 저장
             newFamousSaying = famousSayings.stream().filter(f -> f.getId() == index).findFirst().orElseThrow();
             // 명언 데이터 수정
-            System.out.println("명언(기존): " + newFamousSaying.getContent());
+            System.out.println("명언(기존): " + newFamousSaying.getContents());
             System.out.print("명언: ");
             String contents = IN.nextLine();
             System.out.println("작가(기존): " + newFamousSaying.getAuthor());
@@ -322,12 +342,12 @@ public class Main {
 
             // 명언 목록에 데이터 수정
             famousSayings.stream().filter(f -> f.getId() == index).forEach(f -> {
-                f.setContent(contents);
+                f.setContents(contents);
                 f.setAuthor(author);
             });
 
             newFamousSaying.setAuthor(author);
-            newFamousSaying.setContent(contents);
+            newFamousSaying.setContents(contents);
 
             // 명언 파일 수정
             if(dataFile.isFile()){
@@ -345,7 +365,7 @@ public class Main {
             System.out.println(index + "번 명언이 존재하지 않습니다.");
         }
 
-    }
+    }*/
 
     /**
      *
@@ -354,7 +374,7 @@ public class Main {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    private static void buildFamousSaying(){
+    /*private static void buildFamousSaying(){
         // 명언 데이터 파일 위치 찾기
         File dataFile = new File(FILE_PATH + "/data.json");
         try {
@@ -371,5 +391,5 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
