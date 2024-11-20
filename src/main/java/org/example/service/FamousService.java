@@ -9,11 +9,30 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-// 데이터 호출, 삭제 및 데이터 가공
+/**
+ *
+ * 명언 관련 비즈니스 클래스
+ *
+ * @author shjung
+ * @since 2024. 11. 19.
+ */
 public class FamousService {
 
     private static final FamousRepository famousRepository = new FamousRepository();
 
+    /**
+     *
+     * 명언 등록 비즈니스 함수
+     *
+     * @param id 등록할 ID
+     * @param contents 등록할 명언
+     * @param author 등록할 작가
+     *
+     * @return 등록여부 메시지
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
     public String addFamousSaying(int id, String contents, String author){
         String message = "";
 
@@ -30,15 +49,28 @@ public class FamousService {
         return message;
     }
 
-    public List<FamousSayingModel> readFamousSayings(){
+    /**
+     *
+     * 명언 목록 검색 비즈니스 함수
+     *
+     * @return 명언 목록
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
+    public List<FamousSayingModel> readFamousSayings(String value){
         List<FamousSayingModel> famousSayingModels = new ArrayList<>();
 
+        // 명언 이름 목록 조회
         List<String> filenames = famousRepository.findFilenames();
 
+        // 목록에서 data.json 제외
         filenames = filenames.stream().filter(f -> !f.equals("data.json")).toList();
 
+        // 명언 이름 목록을 배열로 변경
         String[] filenames1 = filenames.toArray(new String[filenames.size()]);
 
+        // 배열에서 만들어진 순서대로 정렬
         Arrays.sort(filenames1, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -78,9 +110,39 @@ public class FamousService {
             famousSayingModels.addFirst(famousSaying);
         }
 
+        // 검색 기능 추가 필터링
+        if(!value.equals("목록")){
+            // 물음표 기준으로 검색 조건 파싱
+            String[] keywords = value.split("\\?")[1].split("&");
+            // 검색어 파싱
+            String keyword = keywords[0].split("=")[1];
+            // 검색어 타입 파싱
+            String keywordType = keywords[1].split("=")[1];
+            // 작가 검색일 경우
+            if(keywordType.equals("author")){
+                famousSayingModels = famousSayingModels.stream().filter(f -> f.getAuthor().contains(keyword)).toList();
+            }
+            // 명언 검색일 경우
+            else{
+                famousSayingModels = famousSayingModels.stream().filter(f -> f.getContents().contains(keyword)).toList();
+            }
+        }
+
         return famousSayingModels;
     }
 
+    /**
+     *
+     * 단일 명언 검색 비즈니스 모델
+     * - 수정할 때 필요
+     *
+     * @param id 검색하고자 하는 명언 ID
+     *
+     * @return 검색한 명언
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
     public FamousSayingModel readFamousSaying(int id){
         String data = famousRepository.readFamousSaying(id + ".json");
         // 파일 데이터 분류
@@ -105,6 +167,17 @@ public class FamousService {
         return famousSaying;
     }
 
+    /**
+     *
+     * 명언 수정 비즈니스 함수
+     *
+     * @param famousSayingModel 수정하고자 하는 명언
+     *
+     * @return 수정 여부 메시지
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
     public String updateFamousSaying(FamousSayingModel famousSayingModel){
         String message = "";
 
@@ -118,6 +191,17 @@ public class FamousService {
         return message;
     }
 
+    /**
+     *
+     * 명언 삭제 비즈니스 함수
+     *
+     * @param id 삭제하고자 하는 명언 ID
+     *
+     * @return 삭제 여부 메시지
+     *
+     * @author shjung
+     * @since 2024. 11. 20
+     */
     public String deleteFamousSaying(int id){
         String message = "";
 
@@ -131,11 +215,30 @@ public class FamousService {
         return message;
     }
 
+    /**
+     *
+     * 마지막 ID 조회 비즈니스 함수
+     *
+     * @return 마지막 ID
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
     public int readLastId(){
-        int lastId = famousRepository.readLastId();
-        return lastId;
+        return famousRepository.readLastId();
     }
 
+    /**
+     *
+     * data.json 빌드 비즈니스 함수
+     *
+     * @param famousSayingModels 명언 목록
+     *
+     * @return 빌드 여부 메시지
+     *
+     * @author shjung
+     * @since 2024. 11. 20.
+     */
     public String createDataJson(List<FamousSayingModel> famousSayingModels){
         String message = "";
         List<FamousSaying> famousSayings = new ArrayList<>();

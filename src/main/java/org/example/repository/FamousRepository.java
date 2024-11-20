@@ -6,9 +6,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-// 파일 저장 및 읽기
+/**
+ *
+ * 명언 파일 관련 레포지토리
+ *
+ * @author shjung
+ * @since 2024. 11. 19.
+ */
 public class FamousRepository {
 
     // 파일 저장 위치
