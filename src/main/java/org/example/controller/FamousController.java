@@ -77,6 +77,11 @@ public class FamousController {
 
         int pages = (famousSayingModels.size() / 5) + (famousSayingModels.size() % 5 == 0 ? 0 : 1);
 
+        if(pageNum > pages){
+            System.out.println("페이지 범위를 넘어간 페이지입니다.");
+            return;
+        }
+
         famousSayingModels = famousSayingModels.stream().skip((pageNum - 1) * 5).limit(5).toList();
         System.out.println("----------------");
         System.out.println("검색 타입: " + keywordType);
