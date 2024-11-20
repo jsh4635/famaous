@@ -1,3 +1,5 @@
+package org.example.controller;
+
 import java.io.*;
 import java.util.Scanner;
 

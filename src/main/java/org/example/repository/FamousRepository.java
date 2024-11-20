@@ -187,9 +187,10 @@ public class FamousRepository {
             if(dataFile.isFile()){
                 dataFile.delete();
             }
+            else return 0;
 
         } catch (Exception e) {
-            return 0;
+            return 2;
         }
         return 1;
     }

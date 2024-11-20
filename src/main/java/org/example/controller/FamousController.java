@@ -16,11 +16,23 @@ import java.util.Scanner;
  */
 public class FamousController {
 
-    private final FamousService famousService = new FamousService();;
+    private FamousService famousService;
 
     private static List<FamousSayingModel> famousSayingModels = new ArrayList<>();
 
-    private static Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
+
+    public FamousController() {
+        this.famousService = new FamousService();
+        this.scanner = new Scanner(System.in);
+    }
+
+    public FamousController(Scanner scanner){
+        this.famousService = new FamousService();
+        this.scanner = scanner;
+    }
+
+
 
     /**
      *
@@ -120,6 +132,11 @@ public class FamousController {
 
         // 찾은 ID를 통해서 수정하고자 하는 명언 검색
         FamousSayingModel famousSayingModel = famousService.readFamousSaying(id);
+
+        if(famousSayingModel == null){
+            System.out.println(id + "번 명언이 존재하지 않습니다.");
+            return;
+        }
 
         System.out.println("명언(기존): " + famousSayingModel.getContents());
         System.out.print("명언: ");

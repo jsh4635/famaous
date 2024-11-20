@@ -139,6 +139,11 @@ public class FamousService {
      */
     public FamousSayingModel readFamousSaying(int id){
         String data = famousRepository.readFamousSaying(id + ".json");
+
+        if("실패".equals(data)){
+            return null;
+        }
+
         // 파일 데이터 분류
         // - 전부 다 String 값으로 불러오기 때문에
         String[] datas = data.split(",");
@@ -205,6 +210,7 @@ public class FamousService {
 
         if(check == 0) message = id + "번 명언이 존재하지 않습니다.";
         else if(check == 1) message = id + "번 명언을 삭제하였습니다..";
+        else if(check == 2) message = id + "번 명언을 삭제하는데 오류가 발생했습니다.";
 
         return message;
     }
