@@ -5,6 +5,7 @@ import org.example.repository.entity.FamousSaying;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -19,11 +20,32 @@ public class FamousRepository {
     // 파일 저장 위치
     private static final String FILE_PATH = "/Users/shjung/Desktop/Java/db/wiseSaying";
 
+
+    /**
+     *
+     * 명언과 마지막 ID를 같이 저장하는 함수
+     *
+     * @param famousSaying 명언 모델
+     *
+     * @return 성공 시 1, 실패 시 0 전달
+     *
+     * @author shjung
+     * @since 2024. 11. 21.
+     */
+    public int createFile(FamousSaying famousSaying){
+        int check = this.createFile(famousSaying, true);
+        int lastIdCheck = this.createFile(famousSaying, false);
+
+        if(check == 0 || lastIdCheck == 0){
+            return 0;
+        }
+        return 1;
+    }
+
     /**
      *
      * 파일 생성 함수
      *
-     * @param filename 파일 이름
      * @param famousSaying 명언 오브젝트
      * @param entity 명언 오브젝트를 저장할 것인지 아니면 마지막 ID만 저장할 것인지에 대한 변수
      *               - ture일 경우 명언 저장, false일 경우 ID만 저장
@@ -33,8 +55,8 @@ public class FamousRepository {
      * @author shjung
      * @since 2024. 11. 19.
      */
-    public int createFile(String filename, FamousSaying famousSaying, boolean entity){
-
+    public int createFile(FamousSaying famousSaying, boolean entity){
+        String filename = entity ? famousSaying.getId() + ".json" : "lastId.txt";
         File dataFile = new File(FILE_PATH + "/" + filename);
 
         if(entity){
@@ -152,6 +174,7 @@ public class FamousRepository {
      * @since 2024. 11. 19.
      */
     public String readFamousSaying(String filename){
+        if(!filename.endsWith(".json")) filename += ".json";
         File newFile = new File(FILE_PATH + "/" + filename);
 
         try{
@@ -234,6 +257,25 @@ public class FamousRepository {
         } catch (Exception e){
             e.printStackTrace();
         }
+        // 목록에서 data.json 제외
+        filenames = filenames.stream().filter(f -> !f.equals("data.json")).toList();
+
+        // 명언 이름 목록을 배열로 변경
+        String[] filenames1 = filenames.toArray(new String[filenames.size()]);
+
+        // 배열에서 만들어진 순서대로 정렬
+        Arrays.sort(filenames1, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String s1 = o1.replaceAll("[^0-9]", "");
+                String s2 = o2.replaceAll("[^0-9]", "");
+                int a = Integer.parseInt(s1);
+                int b = Integer.parseInt(s2);
+                return a - b;
+            }
+        });
+
+        filenames = Arrays.stream(filenames1).toList();
 
         return filenames;
     }

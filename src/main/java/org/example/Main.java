@@ -6,9 +6,6 @@ import java.util.*;
 
 public class Main {
 
-    // 입력받기 위한 Scanner
-    private static final Scanner IN = new Scanner(System.in);
-
     // 명언 컨트롤러 선언
     private static FamousController famousController = new FamousController();
 
@@ -19,42 +16,6 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        // 마지막 ID에서 + 1를 더함
-        // - 마지막 보다 하나 높은 ID를 등록하기 위함
-        int lastId = famousController.readLastId() + 1;
-
-        System.out.println("== 명언 앱 ==");
-
-        // 명령어 받을 변수 선언
-        String value = "";
-
-        // 종료 명령어가 나올 때까지 하는 반복문
-        while(!value.equals("종료")){
-            // 명령어 입력받는 부분
-            System.out.print("명령) ");
-            value = IN.nextLine();
-
-            if(value.equals("등록")){
-                // 명언 등록 함수 호출
-                lastId = famousController.addFamousSaying(lastId);
-            }
-            else if(value.contains("목록")){
-                // 명언 목록 출력 함수 호출
-                famousController.printFamousSayings(value);
-            }
-            else if(value.contains(("삭제?id="))){
-                // 명언 삭제 함수 호출
-                famousController.deleteFamousSaying(value);
-            }
-            else if(value.contains("수정?id=")){
-                // 명언 수정 함수 호출
-                famousController.updateFamousSaying(value);
-            }
-            else if(value.equals("빌드")){
-                // data.json 파일 저장 함수 호출
-                famousController.buildFamousSaying();
-            }
-        }
-        IN.close();
+        famousController.run();
     }
 }

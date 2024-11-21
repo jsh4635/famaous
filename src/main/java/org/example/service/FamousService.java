@@ -37,10 +37,10 @@ public class FamousService {
         String message = "";
 
         FamousSaying famousSaying = new FamousSaying(id, contents, author);
-        int check = famousRepository.createFile(famousSaying.getId() + ".json", famousSaying, true);
-        int lastIdCheck = famousRepository.createFile("lastId.txt", famousSaying, false);
 
-        if(check == 0 || lastIdCheck == 0){
+        int check = famousRepository.createFile(famousSaying);
+
+        if(check == 0){
             message = id + "번 명언 등록에 실패하였습니다.";
         } else {
             message = id + "번 명언이 등록되었습니다.";
@@ -63,26 +63,6 @@ public class FamousService {
 
         // 명언 이름 목록 조회
         List<String> filenames = famousRepository.findFilenames();
-
-        // 목록에서 data.json 제외
-        filenames = filenames.stream().filter(f -> !f.equals("data.json")).toList();
-
-        // 명언 이름 목록을 배열로 변경
-        String[] filenames1 = filenames.toArray(new String[filenames.size()]);
-
-        // 배열에서 만들어진 순서대로 정렬
-        Arrays.sort(filenames1, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                String s1 = o1.replaceAll("[^0-9]", "");
-                String s2 = o2.replaceAll("[^0-9]", "");
-                int a = Integer.parseInt(s1);
-                int b = Integer.parseInt(s2);
-                return a - b;
-            }
-        });
-
-        filenames = Arrays.stream(filenames1).toList();
 
         for(String filename : filenames){
             String data = famousRepository.readFamousSaying(filename);
@@ -138,7 +118,7 @@ public class FamousService {
      * @since 2024. 11. 20.
      */
     public FamousSayingModel readFamousSaying(int id){
-        String data = famousRepository.readFamousSaying(id + ".json");
+        String data = famousRepository.readFamousSaying(id + "");
 
         if("실패".equals(data)){
             return null;
@@ -182,7 +162,7 @@ public class FamousService {
 
         FamousSaying famousSaying = new FamousSaying(famousSayingModel.getId(), famousSayingModel.getContents(), famousSayingModel.getAuthor());
 
-        int check = famousRepository.createFile(famousSaying.getId() + ".json", famousSaying, true);
+        int check = famousRepository.createFile(famousSaying, true);
 
         if(check == 0) message = famousSaying.getId() + "번 명언이 존재하지 않습니다..";
         else if(check == 1) message = famousSaying.getId() + "번 명언이 수정되었습니다.";

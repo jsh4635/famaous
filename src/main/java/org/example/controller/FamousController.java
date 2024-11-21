@@ -22,6 +22,8 @@ public class FamousController {
 
     private Scanner scanner;
 
+    private int id;
+
     public FamousController() {
         this.famousService = new FamousService();
         this.scanner = new Scanner(System.in);
@@ -32,13 +34,52 @@ public class FamousController {
         this.scanner = scanner;
     }
 
+    public void run(){
+        // 마지막 ID에서 + 1를 더함
+        // - 마지막 보다 하나 높은 ID를 등록하기 위함
+        int lastId = this.readLastId() + 1;
+
+        System.out.println("== 명언 앱 ==");
+
+        // 명령어 받을 변수 선언
+        String value = "";
+
+        // 종료 명령어가 나올 때까지 하는 반복문
+        while(!value.equals("종료")){
+            // 명령어 입력받는 부분
+            System.out.print("명령) ");
+            value = scanner.nextLine();
+
+            if(value.equals("등록")){
+                // 명언 등록 함수 호출
+                this.addFamousSaying(lastId);
+            }
+            else if(value.contains("목록")){
+                // 명언 목록 출력 함수 호출
+                this.printFamousSayings(value);
+            }
+            else if(value.contains(("삭제?id="))){
+                // 명언 삭제 함수 호출
+                this.deleteFamousSaying(value);
+            }
+            else if(value.contains("수정?id=")){
+                // 명언 수정 함수 호출
+                this.updateFamousSaying(value);
+            }
+            else if(value.equals("빌드")){
+                // data.json 파일 저장 함수 호출
+                this.buildFamousSaying();
+            }
+        }
+        scanner.close();
+    }
 
 
     /**
      *
      * 명언 등록 함수
      *
-     * @param id 명언 등록 ID
+     * @param id 마지막 ID
      *
      * @return 등록된 ID보다 한 단계 높은 숫자
      *

@@ -13,11 +13,13 @@ class FamousControllerTest {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
         FamousController famousController = new FamousController(TestUtil.genScanner("""
+                등록
                 명언1
                 작가1
+                종료
                 """));
 
-        int id = famousController.addFamousSaying(12);
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -31,9 +33,12 @@ class FamousControllerTest {
     void printFamousSayings() {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
-        FamousController famousController = new FamousController(TestUtil.genScanner(""));
+        FamousController famousController = new FamousController(TestUtil.genScanner("""
+                목록
+                종료
+                """));
 
-        famousController.printFamousSayings("목록");
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -51,11 +56,12 @@ class FamousControllerTest {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
         FamousController famousController = new FamousController(TestUtil.genScanner("""
+                수정?id=13
                 명언2
                 작가2
+                종료
                 """));
-
-        famousController.updateFamousSaying("수정?id=12");
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -70,11 +76,12 @@ class FamousControllerTest {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
         FamousController famousController = new FamousController(TestUtil.genScanner("""
+                수정?id=13
                 명언2
                 작가2
+                종료
                 """));
-
-        famousController.updateFamousSaying("수정?id=13");
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -88,9 +95,11 @@ class FamousControllerTest {
     void deleteFamousSaying() {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
-        FamousController famousController = new FamousController(TestUtil.genScanner(""));
-
-        famousController.deleteFamousSaying("삭제?id=12");
+        FamousController famousController = new FamousController(TestUtil.genScanner("""
+                삭제?id=13
+                종료
+                """));
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -104,9 +113,11 @@ class FamousControllerTest {
     void deleteFailFamousSaying() {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
-        FamousController famousController = new FamousController(TestUtil.genScanner(""));
-
-        famousController.deleteFamousSaying("삭제?id=12");
+        FamousController famousController = new FamousController(TestUtil.genScanner("""
+                삭제?id=13
+                종료
+                """));
+        famousController.run();
 
         String result = output.toString().trim();
 
@@ -120,9 +131,11 @@ class FamousControllerTest {
     void buildFamousSaying() {
         ByteArrayOutputStream output = TestUtil.setOutToByteArray();
 
-        FamousController famousController = new FamousController(TestUtil.genScanner(""));
-
-        famousController.buildFamousSaying();
+        FamousController famousController = new FamousController(TestUtil.genScanner("""
+                빌드
+                종료
+                """));
+        famousController.run();
 
         String result = output.toString().trim();
 
