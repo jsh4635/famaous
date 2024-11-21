@@ -38,6 +38,7 @@ public class FamousController {
         // 마지막 ID에서 + 1를 더함
         // - 마지막 보다 하나 높은 ID를 등록하기 위함
         int lastId = this.readLastId() + 1;
+        famousSayingModels = famousService.readFamousSayings("목록", "", "");
 
         System.out.println("== 명언 앱 ==");
 
@@ -52,7 +53,7 @@ public class FamousController {
 
             if(value.equals("등록")){
                 // 명언 등록 함수 호출
-                this.addFamousSaying(lastId);
+                lastId = this.addFamousSaying(lastId);
             }
             else if(value.contains("목록")){
                 // 명언 목록 출력 함수 호출
